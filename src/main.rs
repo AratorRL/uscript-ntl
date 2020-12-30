@@ -51,7 +51,8 @@ struct NtlToJsonCommand {
 impl NtlToJsonCommand {
     fn execute(&self) -> Result<()> {
         println!("Reading NTL file...");
-        let items = ntl::read_ntl(&self.ntl_file)?;
+        let mut items = ntl::read_ntl(&self.ntl_file)?;
+        items.sort_by(|a, b| a.opcode.cmp(&b.opcode));
 
         println!("Converting to JSON...");
         let json = serde_json::to_string_pretty(&items)?;
